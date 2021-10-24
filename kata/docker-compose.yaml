@@ -1,0 +1,21 @@
+version: '3'
+
+volumes:
+  mongodb-data:
+    driver: local
+
+networks:
+  defaults:
+    external:
+      name: kata
+
+services:
+  api:
+    build: .
+    ports:
+    - 3000:3000
+    volumes:
+      - .:/app:z
+      - /app/node_modules
+    environment:
+      - DATABASE_URL:mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/${MONGO_INITDB_DATABASE}

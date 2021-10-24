@@ -1,0 +1,20 @@
+version: "3"
+
+networks:
+  default:
+    external:
+      name: kata
+
+services:
+  mongodb:
+    image : mongo
+    container_name: mongodb
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+    volumes:
+      - ./database:/data/db
+      - ./mongo-init.js:/docker-entrypoint-intidb.d/mongo-init.js
+    ports:
+      - 27017:27017
+    restart: unless-stopped
