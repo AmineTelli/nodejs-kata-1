@@ -1,20 +1,24 @@
-version: "3"
-
-networks:
-  default:
-    external:
-      name: kata
+version: '3'
 
 services:
+  graphql:
+    build: .
+    ports:
+    - 3000:3000
+    volumes:
+      - .:/app:z
+      - /app/node_modules
+    environment:
+      - DATABASE_URL=mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:27017/test
+
   mongodb:
-    image : mongo
+    image : mongo:latest
     container_name: mongodb
     environment:
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
     volumes:
       - ./database:/data/db
-      - ./mongo-init.js:/docker-entrypoint-intidb.d/mongo-init.js
     ports:
       - 27017:27017
     restart: unless-stopped
